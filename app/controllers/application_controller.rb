@@ -4,7 +4,11 @@ class ApplicationController < ActionController::API
   end
 
   def test
-    render json: { message: 'Test route' }
+    render json: { message: 'Test route edited' }
+  end
+
+  def test2
+    render json: { message: 'Test route 2' }
   end
 
   def quake_log_parse
