@@ -1,6 +1,18 @@
 # Quake Log Parser Rails app
 
-## Instructions
+## Instructions for live demo
+
+https://quake-log-parser-rails-app.onrender.com
+
+```bash
+# Upload the quake.log file to the API + Save the response to a file (formatted JSON with jq)
+curl -F quake_file=@/path/to/your/quake.log https://quake-log-parser-rails-app.onrender.com/quake_log_parse | jq > api_response.json
+
+# Check the response from the API (formatted JSON)
+cat api_response.json
+```
+
+## Instructions for localhost
 
 ```bash
 # Clone the repository
