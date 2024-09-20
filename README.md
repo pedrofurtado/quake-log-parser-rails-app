@@ -1,24 +1,18 @@
-# README
+# Quake Log Parser Rails app
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Instructions
 
-Things you may want to cover:
+```bash
+# Clone the repository
+git clone https://github.com/pedrofurtado/quake-log-parser-rails-app.git
+cd quake-log-parser-rails-app
 
-* Ruby version
+# Build and run the docker containers
+docker-compose up --build -d
 
-* System dependencies
+# Upload the quake.log file to the API + Save the response to a file (formatted JSON with jq)
+curl -F quake_file=@/path/to/your/quake.log http://localhost:3000/quake_log_parse | jq > api_response.json
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+# Check the response from the API (formatted JSON)
+cat api_response.json
+```
