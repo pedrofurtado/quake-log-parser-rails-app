@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: quake-log-parser-rails-app
+    runtime: ruby
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec rails s"
+    envVars:
+      - key: WEB_CONCURRENCY
+        value: 2
