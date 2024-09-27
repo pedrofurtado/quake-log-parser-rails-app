@@ -28,3 +28,13 @@ curl -F quake_file=@/path/to/your/quake.log http://localhost:3000/quake_log_pars
 # Check the response from the API (formatted JSON)
 cat api_response.json
 ```
+
+## Instructions to produce/consume Kafka messages in localhost
+
+```bash
+# Produce
+docker container exec -it quake-log-parser-rails-app_web_1 bundle exec rake kafka:produce_message
+
+# Consume
+docker container logs -f quake-log-parser-rails-app_kafka_consumer_1
+```

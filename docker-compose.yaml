@@ -1,5 +1,52 @@
 version: '3'
 services:
+  zookeeper:
+    restart: always
+    image: confluentinc/cp-zookeeper:7.6.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    restart: always
+    image: confluentinc/cp-kafka:7.6.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "4000:9092"
+      - "3004:9094"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: INTERNAL://:9092,OUTSIDE://:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://host.docker.internal:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+
+  control-center:
+    restart: always
+    image: confluentinc/cp-enterprise-control-center:7.6.0
+    hostname: control-center
+    depends_on:
+      - kafka
+    ports:
+      - "9998:9021"
+    environment:
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'kafka:9092'
+      CONTROL_CENTER_REPLICATION_FACTOR: 1
+      CONTROL_CENTER_CONNECT_CLUSTER: http://kafka-connect:8083
+      PORT: 9021
+
+  kafka_consumer:
+    depends_on:
+      - kafka
+    restart: always
+    image: ruby:3.1.6
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: /bin/bash -c "bundle install && bundle exec karafka-web migrate && bundle exec karafka topics migrate && bundle exec karafka server"
+
   web:
     restart: always
     build:
